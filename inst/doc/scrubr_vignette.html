@@ -443,8 +443,12 @@ either missing an epithet, or are missing altogether  (<code>NA</code> or <code>
 
 <p>Get some data from GBIF, via <code>rgbif</code></p>
 
-<pre><code class="r">library(&quot;rgbif&quot;)
-res &lt;- occ_data(limit = 500)$data
+<pre><code class="r">if (requireNamespace(&quot;rgbif&quot;, quietly = TRUE)) {
+  library(&quot;rgbif&quot;)
+  res &lt;- occ_data(limit = 500)$data
+} else {
+  res &lt;- sample_data_3
+}
 </code></pre>
 
 <p>Clean names</p>
