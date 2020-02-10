@@ -2,10 +2,10 @@
 % Please edit documentation in R/date-funs.R
 \name{date}
 \alias{date}
+\alias{date_standardize}
+\alias{date_missing}
 \alias{date_create}
 \alias{date_create_}
-\alias{date_missing}
-\alias{date_standardize}
 \title{Date based cleaning}
 \usage{
 date_standardize(x, format = "\%Y-\%m-\%d", date_column = "date", ...)
@@ -19,7 +19,7 @@ date_create_(x, ..., .dots, format = "\%Y-\%m-\%d", date_column = "date")
 \arguments{
 \item{x}{(data.frame) A data.frame}
 
-\item{format}{(character) Date format. See \code{\link{as.Date}}}
+\item{format}{(character) Date format. See \code{\link[=as.Date]{as.Date()}}}
 
 \item{date_column}{(character) Name of the date column}
 
@@ -38,10 +38,10 @@ Date based cleaning
 }
 \details{
 \itemize{
- \item date_standardize - Converts dates to a specific format
- \item date_missing - Drops records that do not have dates, either via being
- NA or being a zero length character string
- \item date_create - Create a date field from
+\item date_standardize - Converts dates to a specific format
+\item date_missing - Drops records that do not have dates, either via being
+NA or being a zero length character string
+\item date_create - Create a date field from
 }
 }
 \examples{
@@ -64,4 +64,3 @@ dframe(df) \%>\% date_create(year, month, day)
 ## SE
 date_create_(dframe(df), "year", "month", "day")
 }
-

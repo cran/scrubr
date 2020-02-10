@@ -1,11 +1,11 @@
 #' scrubr datasets
 #'
-#' \itemize{
-#'  \item \code{\link{sample_data_1}}
-#'  \item \code{\link{sample_data_2}}
-#'  \item \code{\link{sample_data_3}}
-#'  \item \code{\link{sample_data_4}}
-#' }
+#' - [sample_data_1]
+#' - [sample_data_2]
+#' - [sample_data_3]
+#' - [sample_data_4]
+#' - [sample_data_6]
+#'
 #' @name scrubr_datasets
 #' @keywords datasets
 NULL
@@ -77,6 +77,50 @@ NULL
 #'
 #' Data originally collected from GBIF
 #' @name sample_data_4
+#' @docType data
+#' @keywords datasets internal
+NULL
+
+#' Sample data.frame number 5
+#'
+#' @format A data frame with 39 rows and 5 variables:
+#' \describe{
+#'   \item{name}{taxonomic name}
+#'   \item{longitude}{longitude, decimal degree}
+#'   \item{latitude}{latitude, decimal degree}
+#'   \item{date}{date, date the occurrence was recorded}
+#'   \item{key}{GBIF occurrence key}
+#' }
+#'
+#' Data originally collected from GBIF
+#' @name sample_data_5
+#' @docType data
+#' @keywords datasets internal
+NULL
+
+#' Sample data.frame number 6
+#'
+#' @format A data frame with 50 rows and 5 variables:
+#' \describe{
+#'   \item{name}{taxonomic name}
+#'   \item{key}{GBIF occurrence key}
+#'   \item{decimalLatitude}{latitude, decimal degree}
+#'   \item{decimalLongitude}{longitude, decimal degree}
+#'   \item{coordinateUncertaintyInMeters}{Uncertainity, the point-radius representation of the location}
+#' }
+#'
+#' Data originally collected from GBIF
+#' @name sample_data_6
+#' @docType data
+#' @keywords datasets internal
+NULL
+
+#' Sample data.frame number 7
+#'
+#' @format A data frame with 50 rows and 91 variables
+#'
+#' Data originally collected from GBIF
+#' @name sample_data_7
 #' @docType data
 #' @keywords datasets internal
 NULL

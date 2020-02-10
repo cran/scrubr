@@ -1,64 +1,71 @@
-scrubr
-======
+---
+title: "scrubr introduction"
+date: "2020-02-10"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: readable
+vignette: >
+  %\VignetteIndexEntry{scrubr introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 
 
-[![Build Status](https://travis-ci.org/ropensci/scrubr.svg?branch=master)](https://travis-ci.org/ropensci/scrubr)
-[![cran checks](https://cranchecks.info/badges/worst/scrubr)](https://cranchecks.info/pkgs/scrubr)
-[![codecov.io](https://codecov.io/github/ropensci/scrubr/coverage.svg?branch=master)](https://codecov.io/github/ropensci/scrubr?branch=master)
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/scrubr?color=ff69b4)](https://github.com/metacran/cranlogs.app)
-[![cran version](https://www.r-pkg.org/badges/version/scrubr)](https://cran.r-project.org/package=scrubr)
 
-__Clean Biological Occurrence Records__
+`scrubr` is a general purpose toolbox for cleaning biological occurrence records. Think
+of it like `dplyr` but specifically for occurrence data. It includes functionality for
+cleaning based on various aspects of spatial coordinates, unlikely values due to political
+centroids, taxonomic names, and more.
 
-Clean using the following use cases (checkmarks indicate fxns exist - not necessarily complete):
+## Installation
 
-- [x] Impossible lat/long values: e.g., latitude 75
-- [x] Incomplete cases: one or the other of lat/long missing
-- [x] Unlikely lat/long values: e.g., points at 0,0
-- [x] Deduplication: try to identify duplicates, esp. when pulling data from multiple sources, e.g., can try to use occurrence IDs, if provided
-- [x] Date based cleaning
-* [x] Outside political boundary: User input to check for points in the wrong country, or points outside of a known country
-* [x] Taxonomic name based cleaning: via `taxize` (one method so far)
-* Political centroids: unlikely that occurrences fall exactly on these points, more likely a
-default position (Draft function started, but not exported, and commented out). see [issue #6](https://github.com/ropensci/scrubr/issues/6)
-* Herbaria/Museums: many specimens may have location of the collection they are housed in, see [issue #20](https://github.com/ropensci/scrubr/issues/20)
-* Habitat type filtering: e.g., fish should not be on land; marine fish should not be in fresh water
-* Check for contextually wrong values: That is, if 99 out of 100 lat/long coordinates are within the continental US, but 1 is in China, then perhaps something is wrong with that one point
-* Collector/recorder names: see [issue #19](https://github.com/ropensci/scrubr/issues/19)
-* ...
-
-A note about examples: We think that using a piping workflow with `%>%` makes code easier to
-build up, and easier to understand. However, in some examples we provide examples without the pipe
-to demonstrate traditional usage.
-
-## Install
-
-Stable CRAN version
+Install from CRAN
 
 
 ```r
 install.packages("scrubr")
 ```
 
-Development version
+Or install the development version from GitHub
 
 
 ```r
 devtools::install_github("ropensci/scrubr")
 ```
 
+Load scrubr
+
 
 ```r
 library("scrubr")
 ```
 
+We'll use sample datasets included with the package, they are lazy loaded,
+and available via `sample_data_1` and `sample_data_2`
+
+## data.frame's
+
+All functions expect data.frame's as input, and output data.frame's
+
+## Pipe vs. no pipe
+
+We think that using a piping workflow with `%>%` makes code easier to
+build up, and easier to understand. However, in some examples below we provide
+commented out examples without the pipe to demonstrate traditional usage - which
+you can use if you remove the comment `#` at beginning of the line.
+
+## dframe
+
+`dframe()` is a utility function to create a compact data.frame representation. You 
+don't have to use it. If you do, you can work with `scrubr` functions with a compact
+data.frame, making it easier to see the data quickly. If you don't use `dframe()`
+we just use your regular data.frame. Problem is with large data.frame's you deal with 
+lots of stuff printed to the screen, making it hard to quickly wrangle data.
+
 ## Coordinate based cleaning
-
-
-```r
-data("sampledata1")
-```
 
 Remove impossible coordinates (using sample data included in the pkg)
 
@@ -160,7 +167,6 @@ dframe(sample_data_1) %>% coord_incomplete(drop = FALSE) %>% NROW
 #> [1] 1500
 ```
 
-
 ## Deduplicate
 
 
@@ -189,9 +195,8 @@ Standardize/convert dates
 
 
 ```r
-df <- sample_data_1
 # date_standardize(dframe(df), "%d%b%Y") # w/o pipe
-dframe(df) %>% date_standardize("%d%b%Y")
+dframe(sample_data_1) %>% date_standardize("%d%b%Y")
 #> # A tibble: 1,500 x 5
 #>    name             longitude latitude date             key
 #>    <chr>                <dbl>    <dbl> <chr>          <int>
@@ -212,9 +217,9 @@ Drop records without dates
 
 
 ```r
-NROW(df)
+NROW(sample_data_1)
 #> [1] 1500
-NROW(dframe(df) %>% date_missing())
+NROW(dframe(sample_data_1) %>% date_missing())
 #> [1] 1498
 ```
 
@@ -239,32 +244,77 @@ dframe(sample_data_2) %>% date_create(year, month, day)
 #> # … with 1,490 more rows
 ```
 
-## Ecoregion
+## Taxonomy
 
-Filter by FAO areas
+Only one function exists for taxonomy cleaning, it removes rows where taxonomic names are 
+either missing an epithet, or are missing altogether  (`NA` or `NULL`).
+
+Get some data from GBIF, via `rgbif`
 
 
 ```r
-wkt <- 'POLYGON((72.2 38.5,-173.6 38.5,-173.6 -41.5,72.2 -41.5,72.2 38.5))'
-manta_ray <- rgbif::name_backbone("Mobula alfredi")$usageKey
-res <- rgbif::occ_data(manta_ray, geometry = wkt, limit=300, hasCoordinate = TRUE)
-dat <- sf::st_as_sf(res$data, coords = c("decimalLongitude", "decimalLatitude"))
-dat <- sf::st_set_crs(dat, 4326)
-mapview::mapview(dat)
-tmp <- eco_region(dframe(res$data), dataset = "fao", region = "OCEAN:Indian")
-tmp <- tmp[!is.na(tmp$decimalLongitude), ]
-tmp2 <- sf::st_as_sf(tmp, coords = c("decimalLongitude", "decimalLatitude"))
-tmp2 <- sf::st_set_crs(tmp2, 4326)
-mapview::mapview(tmp2)
+if (requireNamespace("rgbif", quietly = TRUE)) {
+  library("rgbif")
+  res <- occ_data(limit = 500)$data
+} else {
+  res <- sample_data_3
+}
 ```
 
-## Meta
+Clean names
 
-* Please [report any issues or bugs](https://github.com/ropensci/scrubr/issues).
-* License: MIT
-* Get citation information for `scrubr` in R doing `citation(package = 'scrubr')`
-* Please note that this project is released with a [Contributor Code of Conduct][coc]. By participating in this project you agree to abide by its terms.
 
-[![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
-
-[coc]: https://github.com/ropensci/scrubr/blob/master/CODE_OF_CONDUCT.md
+```r
+NROW(res)
+#> [1] 500
+df <- dframe(res) %>% tax_no_epithet(name = "name")
+NROW(df)
+#> [1] 486
+attr(df, "name_var")
+#> [1] "name"
+attr(df, "tax_no_epithet")
+#> # A tibble: 14 x 96
+#>    key   scientificName decimalLatitude decimalLongitude issues datasetKey
+#>    <chr> <chr>                    <dbl>            <dbl> <chr>  <chr>     
+#>  1 2542… Agaricales                55.9            12.3  cdrou… 84d26682-…
+#>  2 2542… Fungi                     56.5             9.84 cdrou… 84d26682-…
+#>  3 2542… Agaricales                55.9            12.5  cdrou… 84d26682-…
+#>  4 2542… Polyporales               55.9            12.3  cdrou… 84d26682-…
+#>  5 2542… Trichiaceae               56.7             9.87 cdrou… 84d26682-…
+#>  6 2542… Xylariales                56.2            10.6  cdrou… 84d26682-…
+#>  7 2542… Hymenochaetac…            56.5             9.84 cdrou… 84d26682-…
+#>  8 2542… Polyporales               56.0            12.3  cdrou… 84d26682-…
+#>  9 2542… Fungi                     55.8            12.5  cdrou… 84d26682-…
+#> 10 2542… Fungi                     55.9            12.4  cdrou… 84d26682-…
+#> 11 2542… Fungi                     55.9            12.3  cdrou… 84d26682-…
+#> 12 2542… Fungi                     55.9            12.3  cdrou… 84d26682-…
+#> 13 2542… Hyaloscyphace…            54.9            11.5  cdrou… 84d26682-…
+#> 14 2542… Physarales                54.9            11.5  cdrou… 84d26682-…
+#> # … with 90 more variables: publishingOrgKey <chr>, installationKey <chr>,
+#> #   publishingCountry <chr>, protocol <chr>, lastCrawled <chr>,
+#> #   lastParsed <chr>, crawlId <int>, basisOfRecord <chr>, taxonKey <int>,
+#> #   kingdomKey <int>, phylumKey <int>, classKey <int>, orderKey <int>,
+#> #   familyKey <int>, genusKey <int>, speciesKey <int>, acceptedTaxonKey <int>,
+#> #   acceptedScientificName <chr>, kingdom <chr>, phylum <chr>, order <chr>,
+#> #   family <chr>, genus <chr>, species <chr>, genericName <chr>,
+#> #   specificEpithet <chr>, taxonRank <chr>, taxonomicStatus <chr>,
+#> #   dateIdentified <chr>, elevation <dbl>, elevationAccuracy <dbl>,
+#> #   stateProvince <chr>, year <int>, month <int>, day <int>, eventDate <chr>,
+#> #   modified <chr>, lastInterpreted <chr>, license <chr>, geodeticDatum <chr>,
+#> #   class <chr>, countryCode <chr>, country <chr>, rightsHolder <chr>,
+#> #   identifier <chr>, recordNumber <chr>, municipality <chr>,
+#> #   datasetName <chr>, locality <chr>, gbifID <chr>, collectionCode <chr>,
+#> #   language <chr>, occurrenceID <chr>, type <chr>, catalogNumber <chr>,
+#> #   recordedBy <chr>, institutionCode <chr>, ownerInstitutionCode <chr>,
+#> #   occurrenceRemarks <chr>, identifiedBy <chr>, references <chr>,
+#> #   eventID <chr>, occurrenceStatus <chr>, vernacularName <chr>,
+#> #   locationRemarks <chr>, dataGeneralizations <chr>, taxonConceptID <chr>,
+#> #   coordinateUncertaintyInMeters <dbl>, individualCount <int>,
+#> #   continent <chr>, county <chr>, identificationVerificationStatus <chr>,
+#> #   taxonID <chr>, eventTime <chr>, behavior <chr>, informationWithheld <chr>,
+#> #   endDayOfYear <chr>, originalNameUsage <chr>, startDayOfYear <chr>,
+#> #   datasetID <chr>, accessRights <chr>, higherClassification <chr>,
+#> #   habitat <chr>, dynamicProperties <chr>, associatedTaxa <chr>,
+#> #   locationAccordingTo <chr>, locationID <chr>, bibliographicCitation <chr>,
+#> #   verbatimLocality <chr>, name <chr>
+```
