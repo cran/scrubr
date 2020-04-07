@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-02-10" />
+<meta name="date" content="2020-04-06" />
 
 <title>scrubr introduction</title>
 
@@ -1522,7 +1522,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">scrubr introduction</h1>
-<h4 class="date">2020-02-10</h4>
+<h4 class="date">2020-04-06</h4>
 
 </div>
 
@@ -1533,7 +1533,7 @@ div.tocify {
 <p>Install from CRAN</p>
 <pre class="r"><code>install.packages(&quot;scrubr&quot;)</code></pre>
 <p>Or install the development version from GitHub</p>
-<pre class="r"><code>devtools::install_github(&quot;ropensci/scrubr&quot;)</code></pre>
+<pre class="r"><code>remotes::install_github(&quot;ropensci/scrubr&quot;)</code></pre>
 <p>Load scrubr</p>
 <pre class="r"><code>library(&quot;scrubr&quot;)</code></pre>
 <p>We’ll use sample datasets included with the package, they are lazy loaded, and available via <code>sample_data_1</code> and <code>sample_data_2</code></p>
@@ -1703,54 +1703,63 @@ NROW(dframe(sample_data_1) %&gt;% date_missing())
 #&gt; [1] 500
 df &lt;- dframe(res) %&gt;% tax_no_epithet(name = &quot;name&quot;)
 NROW(df)
-#&gt; [1] 486
+#&gt; [1] 481
 attr(df, &quot;name_var&quot;)
 #&gt; [1] &quot;name&quot;
 attr(df, &quot;tax_no_epithet&quot;)
-#&gt; # A tibble: 14 x 96
+#&gt; # A tibble: 19 x 107
 #&gt;    key   scientificName decimalLatitude decimalLongitude issues datasetKey
 #&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     
-#&gt;  1 2542… Agaricales                55.9            12.3  cdrou… 84d26682-…
-#&gt;  2 2542… Fungi                     56.5             9.84 cdrou… 84d26682-…
-#&gt;  3 2542… Agaricales                55.9            12.5  cdrou… 84d26682-…
-#&gt;  4 2542… Polyporales               55.9            12.3  cdrou… 84d26682-…
-#&gt;  5 2542… Trichiaceae               56.7             9.87 cdrou… 84d26682-…
-#&gt;  6 2542… Xylariales                56.2            10.6  cdrou… 84d26682-…
-#&gt;  7 2542… Hymenochaetac…            56.5             9.84 cdrou… 84d26682-…
-#&gt;  8 2542… Polyporales               56.0            12.3  cdrou… 84d26682-…
-#&gt;  9 2542… Fungi                     55.8            12.5  cdrou… 84d26682-…
-#&gt; 10 2542… Fungi                     55.9            12.4  cdrou… 84d26682-…
-#&gt; 11 2542… Fungi                     55.9            12.3  cdrou… 84d26682-…
-#&gt; 12 2542… Fungi                     55.9            12.3  cdrou… 84d26682-…
-#&gt; 13 2542… Hyaloscyphace…            54.9            11.5  cdrou… 84d26682-…
-#&gt; 14 2542… Physarales                54.9            11.5  cdrou… 84d26682-…
-#&gt; # … with 90 more variables: publishingOrgKey &lt;chr&gt;, installationKey &lt;chr&gt;,
+#&gt;  1 1637… Aves                     -34.5           136.   &quot;&quot;     40c0f670-…
+#&gt;  2 1989… Psychidae                 25.0           122.   &quot;txma… e0b8cb67-…
+#&gt;  3 2542… Agaricales                55.9            12.3  &quot;cdro… 84d26682-…
+#&gt;  4 2542… Corticiaceae              56.5             9.84 &quot;&quot;     84d26682-…
+#&gt;  5 2542… Corticiaceae              55.1            10.5  &quot;cdro… 84d26682-…
+#&gt;  6 2542… Fungi                     56.5             9.84 &quot;cdro… 84d26682-…
+#&gt;  7 2542… Agaricales                55.9            12.5  &quot;cdro… 84d26682-…
+#&gt;  8 2542… Polyporales               55.9            12.3  &quot;cdro… 84d26682-…
+#&gt;  9 2542… Trichiaceae               56.7             9.87 &quot;cdro… 84d26682-…
+#&gt; 10 2542… Xylariales                56.2            10.6  &quot;cdro… 84d26682-…
+#&gt; 11 2542… Corticiaceae              56.5             9.84 &quot;cdro… 84d26682-…
+#&gt; 12 2542… Hymenochaetac…            56.5             9.84 &quot;cdro… 84d26682-…
+#&gt; 13 2542… Polyporales               56.0            12.3  &quot;cdro… 84d26682-…
+#&gt; 14 2542… Fungi                     55.8            12.5  &quot;cdro… 84d26682-…
+#&gt; 15 2542… Fungi                     55.9            12.4  &quot;cdro… 84d26682-…
+#&gt; 16 2542… Fungi                     55.9            12.3  &quot;cdro… 84d26682-…
+#&gt; 17 2542… Fungi                     55.9            12.3  &quot;cdro… 84d26682-…
+#&gt; 18 2542… Hyaloscyphace…            54.9            11.5  &quot;cdro… 84d26682-…
+#&gt; 19 2542… Physarales                54.9            11.5  &quot;cdro… 84d26682-…
+#&gt; # … with 101 more variables: publishingOrgKey &lt;chr&gt;, installationKey &lt;chr&gt;,
 #&gt; #   publishingCountry &lt;chr&gt;, protocol &lt;chr&gt;, lastCrawled &lt;chr&gt;,
-#&gt; #   lastParsed &lt;chr&gt;, crawlId &lt;int&gt;, basisOfRecord &lt;chr&gt;, taxonKey &lt;int&gt;,
-#&gt; #   kingdomKey &lt;int&gt;, phylumKey &lt;int&gt;, classKey &lt;int&gt;, orderKey &lt;int&gt;,
-#&gt; #   familyKey &lt;int&gt;, genusKey &lt;int&gt;, speciesKey &lt;int&gt;, acceptedTaxonKey &lt;int&gt;,
-#&gt; #   acceptedScientificName &lt;chr&gt;, kingdom &lt;chr&gt;, phylum &lt;chr&gt;, order &lt;chr&gt;,
-#&gt; #   family &lt;chr&gt;, genus &lt;chr&gt;, species &lt;chr&gt;, genericName &lt;chr&gt;,
-#&gt; #   specificEpithet &lt;chr&gt;, taxonRank &lt;chr&gt;, taxonomicStatus &lt;chr&gt;,
-#&gt; #   dateIdentified &lt;chr&gt;, elevation &lt;dbl&gt;, elevationAccuracy &lt;dbl&gt;,
-#&gt; #   stateProvince &lt;chr&gt;, year &lt;int&gt;, month &lt;int&gt;, day &lt;int&gt;, eventDate &lt;chr&gt;,
-#&gt; #   modified &lt;chr&gt;, lastInterpreted &lt;chr&gt;, license &lt;chr&gt;, geodeticDatum &lt;chr&gt;,
-#&gt; #   class &lt;chr&gt;, countryCode &lt;chr&gt;, country &lt;chr&gt;, rightsHolder &lt;chr&gt;,
-#&gt; #   identifier &lt;chr&gt;, recordNumber &lt;chr&gt;, municipality &lt;chr&gt;,
-#&gt; #   datasetName &lt;chr&gt;, locality &lt;chr&gt;, gbifID &lt;chr&gt;, collectionCode &lt;chr&gt;,
-#&gt; #   language &lt;chr&gt;, occurrenceID &lt;chr&gt;, type &lt;chr&gt;, catalogNumber &lt;chr&gt;,
-#&gt; #   recordedBy &lt;chr&gt;, institutionCode &lt;chr&gt;, ownerInstitutionCode &lt;chr&gt;,
-#&gt; #   occurrenceRemarks &lt;chr&gt;, identifiedBy &lt;chr&gt;, references &lt;chr&gt;,
-#&gt; #   eventID &lt;chr&gt;, occurrenceStatus &lt;chr&gt;, vernacularName &lt;chr&gt;,
-#&gt; #   locationRemarks &lt;chr&gt;, dataGeneralizations &lt;chr&gt;, taxonConceptID &lt;chr&gt;,
-#&gt; #   coordinateUncertaintyInMeters &lt;dbl&gt;, individualCount &lt;int&gt;,
-#&gt; #   continent &lt;chr&gt;, county &lt;chr&gt;, identificationVerificationStatus &lt;chr&gt;,
-#&gt; #   taxonID &lt;chr&gt;, eventTime &lt;chr&gt;, behavior &lt;chr&gt;, informationWithheld &lt;chr&gt;,
-#&gt; #   endDayOfYear &lt;chr&gt;, originalNameUsage &lt;chr&gt;, startDayOfYear &lt;chr&gt;,
-#&gt; #   datasetID &lt;chr&gt;, accessRights &lt;chr&gt;, higherClassification &lt;chr&gt;,
-#&gt; #   habitat &lt;chr&gt;, dynamicProperties &lt;chr&gt;, associatedTaxa &lt;chr&gt;,
-#&gt; #   locationAccordingTo &lt;chr&gt;, locationID &lt;chr&gt;, bibliographicCitation &lt;chr&gt;,
-#&gt; #   verbatimLocality &lt;chr&gt;, name &lt;chr&gt;</code></pre>
+#&gt; #   lastParsed &lt;chr&gt;, crawlId &lt;int&gt;, basisOfRecord &lt;chr&gt;,
+#&gt; #   individualCount &lt;int&gt;, taxonKey &lt;int&gt;, kingdomKey &lt;int&gt;, phylumKey &lt;int&gt;,
+#&gt; #   classKey &lt;int&gt;, orderKey &lt;int&gt;, familyKey &lt;int&gt;, genusKey &lt;int&gt;,
+#&gt; #   speciesKey &lt;int&gt;, acceptedTaxonKey &lt;int&gt;, acceptedScientificName &lt;chr&gt;,
+#&gt; #   kingdom &lt;chr&gt;, phylum &lt;chr&gt;, order &lt;chr&gt;, family &lt;chr&gt;, genus &lt;chr&gt;,
+#&gt; #   species &lt;chr&gt;, genericName &lt;chr&gt;, specificEpithet &lt;chr&gt;, taxonRank &lt;chr&gt;,
+#&gt; #   taxonomicStatus &lt;chr&gt;, year &lt;int&gt;, month &lt;int&gt;, eventDate &lt;chr&gt;,
+#&gt; #   modified &lt;chr&gt;, lastInterpreted &lt;chr&gt;, references &lt;chr&gt;, license &lt;chr&gt;,
+#&gt; #   class &lt;chr&gt;, countryCode &lt;chr&gt;, recordedByIDs &lt;list&gt;,
+#&gt; #   identifiedByIDs &lt;list&gt;, rightsHolder &lt;chr&gt;, identifier &lt;chr&gt;,
+#&gt; #   nomenclaturalCode &lt;chr&gt;, dynamicProperties &lt;chr&gt;, language &lt;chr&gt;,
+#&gt; #   collectionCode &lt;chr&gt;, gbifID &lt;chr&gt;, occurrenceID &lt;chr&gt;, type &lt;chr&gt;,
+#&gt; #   taxonRemarks &lt;chr&gt;, preparations &lt;chr&gt;, recordedBy &lt;chr&gt;,
+#&gt; #   catalogNumber &lt;chr&gt;, vernacularName &lt;chr&gt;, institutionCode &lt;chr&gt;,
+#&gt; #   previousIdentifications &lt;chr&gt;, ownerInstitutionCode &lt;chr&gt;,
+#&gt; #   occurrenceRemarks &lt;chr&gt;, bibliographicCitation &lt;chr&gt;, accessRights &lt;chr&gt;,
+#&gt; #   higherClassification &lt;chr&gt;, dateIdentified &lt;chr&gt;, elevation &lt;dbl&gt;,
+#&gt; #   elevationAccuracy &lt;dbl&gt;, stateProvince &lt;chr&gt;, day &lt;int&gt;,
+#&gt; #   geodeticDatum &lt;chr&gt;, country &lt;chr&gt;, recordNumber &lt;chr&gt;, municipality &lt;chr&gt;,
+#&gt; #   locality &lt;chr&gt;, datasetName &lt;chr&gt;, identifiedBy &lt;chr&gt;, eventID &lt;chr&gt;,
+#&gt; #   occurrenceStatus &lt;chr&gt;, locationRemarks &lt;chr&gt;, dataGeneralizations &lt;chr&gt;,
+#&gt; #   taxonConceptID &lt;chr&gt;, coordinateUncertaintyInMeters &lt;dbl&gt;, lifeStage &lt;chr&gt;,
+#&gt; #   infraspecificEpithet &lt;chr&gt;, associatedReferences &lt;chr&gt;, county &lt;chr&gt;,
+#&gt; #   verbatimElevation &lt;chr&gt;, fieldNumber &lt;chr&gt;, continent &lt;chr&gt;,
+#&gt; #   identificationVerificationStatus &lt;chr&gt;, taxonID &lt;chr&gt;, eventTime &lt;chr&gt;,
+#&gt; #   behavior &lt;chr&gt;, informationWithheld &lt;chr&gt;, endDayOfYear &lt;chr&gt;,
+#&gt; #   originalNameUsage &lt;chr&gt;, startDayOfYear &lt;chr&gt;, datasetID &lt;chr&gt;,
+#&gt; #   habitat &lt;chr&gt;, associatedTaxa &lt;chr&gt;, locationAccordingTo &lt;chr&gt;,
+#&gt; #   locationID &lt;chr&gt;, verbatimLocality &lt;chr&gt;, …</code></pre>
 </div>
 
 

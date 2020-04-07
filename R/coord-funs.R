@@ -85,7 +85,7 @@
 #' attr(df_unlikely, "coord_unlikely")
 #'
 #' # Remove points not within correct political borders
-#' if (requireNamespace("rgbif", quietly = TRUE)) {
+#' if (requireNamespace("rgbif", quietly = TRUE) && interactive()) {
 #'    library("rgbif")
 #'    wkt <- 'POLYGON((30.1 10.1,40 40,20 40,10 20,30.1 10.1))'
 #'    res <- rgbif::occ_data(geometry = wkt, limit=300)$data
@@ -261,7 +261,7 @@ coord_within <- function(x, field = NULL, country = NULL,
   }
 
   z <- sf::st_as_sf(x, coords = c("longitude", "latitude"))
-  z <- sf::st_set_crs(z, 4326)
+  z <- sf::st_set_crs(z, "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
   refctrys <- as.character(get("countriesLow", envir = pkgenv)@data$SOVEREIGNT)
 
   if (is.null(field)) {
