@@ -18,7 +18,7 @@ regions_fao()
 \item{dataset}{(character) the dataset to use. one of: "meow" (Marine
 Ecoregions of the World), "fao" (). See Details.}
 
-\item{region}{(character) the region name. has the form \code{a:b} where
+\item{region}{(character) one or more region names. has the form \code{a:b} where
 \code{a} is a variable name (column in the sf object) and \code{b} is the value you want
 to filter to within that variable. See Details.}
 
@@ -88,8 +88,16 @@ tmp <- eco_region(dframe(res), dataset = "meow",
 tmp2 <- sf::st_as_sf(tmp, coords = c("decimalLongitude", "decimalLatitude"))
 tmp2 <- sf::st_set_crs(tmp2, 4326)
 mapview::mapview(tmp2)
+## filter many regions at once
+out <- eco_region(dframe(res), dataset = "meow",
+   region = c("ECOREGION:Mexican Tropical Pacific", "ECOREGION:Seychelles"))
+out
+out2 <- sf::st_as_sf(out, coords = c("decimalLongitude", "decimalLatitude"))
+out2 <- sf::st_set_crs(out2, 4326)
+mapview::mapview(out2)
 
 ## FAO
+## FIXME - this needs fixing, broken
 wkt <- 'POLYGON((72.2 38.5,-173.6 38.5,-173.6 -41.5,72.2 -41.5,72.2 38.5))'
 manta_ray <- rgbif::name_backbone("Mobula alfredi")$usageKey
 res <- rgbif::occ_data(manta_ray, geometry = wkt, limit=300, hasCoordinate = TRUE)

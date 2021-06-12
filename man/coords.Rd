@@ -147,6 +147,12 @@ if (requireNamespace("rgbif", quietly = TRUE) && interactive()) {
 }
 
 ## By specific country name
+if (
+  interactive() &&
+  requireNamespace("sf", quietly=TRUE) && 
+  requireNamespace("s2", quietly=TRUE) && 
+  requireNamespace("rworldmap", quietly=TRUE)
+) {
 NROW(res)
 df_within <- dframe(res) \%>\% coord_within(country = "Israel")
 NROW(df_within)
@@ -159,6 +165,7 @@ df_within <- dframe(res) \%>\% coord_within(field = "country")
 NROW(df_within)
 head(df_within)
 attr(df_within, "coord_within")
+}
 
 # Remove those very near political centroids
 ## not ready yet
